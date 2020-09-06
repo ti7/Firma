@@ -40,16 +40,20 @@ struct employers /*новая структурв employers(employers - новы�
 	string b_day;  /*пременная типа string*/
 	solary_employers temp_emp; /*пременная типа solary_employers*/
 
+	employers (string(firstName),string(lastName),string(newOklad),string(newBDay)):first_name(firstName),last_name(lastName),oklad(newOklad),b_day(newBDay){};
 	
-
-	
-	void change_employers(string f_name, string l_name, string new_p_payments, string new_b_day) /*добавление в программу новых сотрудникоыв*/
+	employers() 
 	{
-		first_name = f_name;
-		last_name = l_name;
-		oklad = new_p_payments;
-		b_day = new_b_day;
+		cout << "constructor default" << endl;
 	}
+		
+	//void change_employers(string f_name, string l_name, string new_p_payments, string new_b_day) /*добавление в программу новых сотрудникоыв*/
+	//{
+	//	first_name = firstName;
+	//	last_name = lastName;
+	//	oklad = newOklad;
+	//	b_day = newBDay;
+	//}
 
 	void save_to_file(string name_of_file) /*запись каждого сотруждника в фаил, каждый раз с новой строки благодаря ios_base::app) */
 	{
@@ -73,14 +77,15 @@ struct employers /*новая структурв employers(employers - новы�
 };
 
 
-void exchange(employers* arr_employers, int first_index, int second_index) /*Замена в массиве arr_employers значений  в результате сравнения*/
+void exchange(vector<employers> vector_employers, int first_index, int second_index) /*Замена в массиве arr_employers значений  в результате сравнения*/
 {
+	
 	employers temp_employer;
-	temp_employer = arr_employers[first_index];
-	arr_employers[first_index] = arr_employers[second_index];
-	arr_employers[second_index] = temp_employer;
+	temp_employer = vector_employers[first_index];
+	vector_employers[first_index] = vector_employers[second_index];
+	vector_employers[second_index] = temp_employer;
 } 
-void sort_by_name_employers(employers* arr_employers) /*сравнение по имени сотрудников в массиве arr_employers и пердача результата в exchange*/
+void sort_by_name_employers(vector<employers> vector_employers) /*сравнение по имени сотрудников в массиве arr_employers и пердача результата в exchange*/
 {	
 	string  vibor_sortirovri;
 	cout << "Отсортировать сотрудников по имени? (yes/no)";
@@ -92,8 +97,8 @@ void sort_by_name_employers(employers* arr_employers) /*сравнение по 
 		{
 			for (int j = 0; j < 3; j++)
 			{
-				if (arr_employers[i].first_name < arr_employers[j].first_name)
-					exchange(arr_employers, i, j);
+				if (vector_employers[i].first_name < vector_employers[j].first_name)
+					exchange(vector_employers, i, j);
 			}
 		}
 		cout << "Сортировка завершена: ";
@@ -101,7 +106,7 @@ void sort_by_name_employers(employers* arr_employers) /*сравнение по 
 	else cout << "Сортировка не применена";
 }
 
-void search_by_name_employers(employers* arr_employers) /*поиск сотрудиника по имени и вызов сразу на печать*/
+void search_by_name_employers(vector<employers> vector_employers) /*поиск сотрудиника по имени и вызов сразу на печать*/
 {
 	string name_for_searching;
 	cout << "Поиск сотрудника по имени: " << endl;
@@ -110,12 +115,12 @@ void search_by_name_employers(employers* arr_employers) /*поиск сотру�
 	
 	for (int i = 0; i < 3; i++)
 	{
-		if (arr_employers[i].first_name == name_for_searching)
-			arr_employers[i].print_employers();
+		if (vector_employers[i].first_name == name_for_searching)
+			vector_employers[i].print_employers();
 	}
 }
 
-void init_all_employers(employers* arr_employers, string name_file_for_reading) /*Перенос сотрудников из фаила в массив*/
+void init_all_employers(vector<employers> vector_employers, string name_file_for_reading) /*Перенос сотрудников из фаила в массив*/
 {
 
 	string info_employers;
@@ -127,21 +132,21 @@ void init_all_employers(employers* arr_employers, string name_file_for_reading) 
 		getline(file_for_reading, info_employers);
 		stringstream ss(info_employers);
 		
-		ss >> arr_employers[i].first_name;
-		ss >> arr_employers[i].last_name;
-		ss >> arr_employers[i].oklad;
-		ss >> arr_employers[i].b_day;
-		ss >> arr_employers[i].temp_emp.outcome;
+		ss >> vector_employers[i].first_name;
+		ss >> vector_employers[i].last_name;
+		ss >> vector_employers[i].oklad;
+		ss >> vector_employers[i].b_day;
+		ss >> vector_employers[i].temp_emp.outcome;
 	}
 	file_for_reading.close();
 }
 
-void print_all_employers(employers* arr_employers) /*Передача в функцию печати сотрудников значения каждоко элемента массива*/
+void print_all_employers(vector<employers> vector_employers) /*Передача в функцию печати сотрудников значения каждоко элемента массива*/
 {	
 	cout << "Список всех сотрудников: " << endl;
 	for (int i = 0; i < 3; i++)
 	{
-		arr_employers[i].print_employers();
+		vector_employers[i].print_employers();
 	}
 }
 
@@ -166,36 +171,39 @@ void init_print_vector(int size_vector)
 int main()
 {
 		setlocale(LC_ALL, "Ru");
-								
-		employers* arr_employers;
-		arr_employers = new employers[3];
-
-		employers employers_new_1; /*новый объект структры - employers_new_1 типа employers*/
-		employers_new_1.change_employers("Andrey ", "Andrevich ", "2000,50 ", "12.07.1999 ");
-		employers_new_1.save_to_file("employers.txt");
 		
-		employers employers_new_2;  /*новый объект структры - employers_new_2  типа employers*/
-		employers_new_2.change_employers("Vladimr ", "Vladimirovich", "16000,50 ", "12.07.1998 ");
-		employers_new_2.save_to_file("employers.txt");
+		vector <employers> vector_employers; 
 		
-		employers employers_new_3;  /*новый объект структры - employers_new_3 типа employers*/
-		employers_new_3.change_employers("Boris ", "Borisovich ", "19000,50 ", "12.07.1998 ");
-		employers_new_3.save_to_file("employers.txt");
 
-		init_all_employers(arr_employers, "employers.txt"); /*вызов функции*/
+		vector_employers.push_back(employers("Andrey","Andreevich","25000","12,8,1991"));                   
+		vector_employers.push_back(employers("Vladimir","Vladimirovich","25000","12.08.1992"));
+		vector_employers.push_back(employers("Boris","Borisovich","25000","12.08.1993"));
+		
+		//employers* arr_employers;
+		//arr_employers = new employers[3];
 
-		print_all_employers(arr_employers); /*вызов функции печати всех*/
+		//employers employers_new_1; /*новый объект структры - employers_new_1 типа employers*/
+		//employers_new_1.change_employers("Andrey ", "Andrevich ", "2000,50 ", "12.07.1999 ");
+		//employers_new_1.save_to_file("employers.txt");
+		//
+		//employers employers_new_2;  /*новый объект структры - employers_new_2  типа employers*/
+		//employers_new_2.change_employers("Vladimr ", "Vladimirovich", "16000,50 ", "12.07.1998 ");
+		//employers_new_2.save_to_file("employers.txt");
+		//
+		//employers employers_new_3;  /*новый объект структры - employers_new_3 типа employers*/
+		//employers_new_3.change_employers("Boris ", "Borisovich ", "19000,50 ", "12.07.1998 ");
+		//employers_new_3.save_to_file("employers.txt");
+
+		init_all_employers(vector_employers, "employers.txt"); /*вызов функции*/
+		print_all_employers(vector_employers); /*вызов функции печати всех*/
 		cout << endl;
-		
 		init_print_vector(3); /*автоввод заплат сотрудников в вектор и затем печать элементов вектора*/
 		cout << endl;
-
-		search_by_name_employers(arr_employers); /*возможность поиска сотрудников по имени*/
+		search_by_name_employers(vector_employers); /*возможность поиска сотрудников по имени*/
+		cout << endl;
+		sort_by_name_employers(vector_employers); /*возможность сортировки сотрудников по имени*/
+		cout << endl;
+		print_all_employers(vector_employers); /*вызов функции печати всех*/
 		cout << endl;
 
-		sort_by_name_employers(arr_employers); /*возможность сортировки сотрудников по имени*/
-		cout << endl;
-
-		print_all_employers(arr_employers); /*вызов функции печати всех*/
-		cout << endl;
 }
